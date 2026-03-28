@@ -11,6 +11,10 @@ Rewrite the Stanford [jai](https://jai.scs.stanford.edu/) project in Rust to pro
 
 ## Technical Roadmap
 
+### Phase 0: The Infrastructure Forge (The "Axe-Sharpening")
+- Goal: Create a specialized r-jai-forge template.
+- Task: Ralph installs Rust, Human snapshots the sandbox.
+
 ### Phase 1: The Syscall Bridge (The "Fix")
 - **New Mount API:** Implement type-safe wrappers for `fsopen`, `fsconfig`, `fsmount`, `move_mount`, and `mount_setattr`.
 - **Crate Selection:** 
