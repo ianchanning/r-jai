@@ -1,7 +1,15 @@
 use anyhow::{Result, Context};
 use rustix::mount::{FsOpenFlags, fsopen};
-use rustix::fd::{OwnedFd}; // Import BorrowedFd
+use rustix::fd::OwnedFd; // Import BorrowedFd
 use std::ffi::{CStr, CString};
+use libc::{self, c_int, c_long};
+
+// Define the syscall number for fsconfig
+#[cfg(target_arch = "x86_64")]
+const SYS_FSCONFIG: c_long = 433; // For x86_64
+
+// Define FSCONFIG_SET_STRING command
+const FSCONFIG_SET_STRING: c_int = 8;
 
 /// Creates a new filesystem context for a new mount.
 ///
@@ -25,6 +33,50 @@ pub fn fsopen_wrapper(fs_name: &str) -> Result<OwnedFd> {
         .context(format!("Failed to open filesystem context for '{}'", fs_name))?;
 
     Ok(fd)
+}
+
+/// Sets a string configuration parameter for a filesystem context using libc::syscall.
+///
+/// This function directly calls the `fsconfig` syscall with `FSCONFIG_SET_STRING` command.
+/// It is inherently `unsafe` and carefully wrapped to provide a safe API.
+///
+/// # Arguments
+/// * `fs_fd` - The raw file descriptor of the filesystem context.
+/// * `key` - The key of the configuration parameter (e.g., "source", "mode").
+/// * `value` - The string value to set for the parameter.
+///
+/// # Returns
+/// A `Result` indicating success or an `anyhow::Error` on failure.
+pub fn fsconfig_set_string(
+    fs_fd: c_int, // Changed to c_int for raw fd
+    key: &str,
+    value: &str,
+) -> Result<()> {
+    let c_key = CString::new(key)
+        .context(format!("Key '{}' contained null bytes", key))?;
+    let c_value = CString::new(value)
+        .context(format!("Value '{}' contained null bytes", value))?;
+
+    let key_ptr = c_key.as_ptr();
+    let value_ptr = c_value.as_ptr();
+
+    let res = unsafe {
+        libc::syscall(
+            SYS_FSCONFIG,
+            fs_fd,
+            FSCONFIG_SET_STRING,
+            key_ptr,
+            value_ptr,
+            0, // aux is 0 for FSCONFIG_SET_STRING
+        )
+    };
+
+    if res == -1 {
+        let errno = unsafe { *libc::__errno_location() };
+        Err(anyhow::anyhow!("fsconfig syscall failed: {}", std::io::Error::from_raw_os_error(errno)))
+    } else {
+        Ok(())
+    }
 }
 
 // TODO: Implement fsconfig, fsmount, move_mount, mount_setattr.

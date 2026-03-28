@@ -1,6 +1,7 @@
 mod mount;
 
 use anyhow::Result;
+use rustix::fd::AsRawFd; // Need to import AsRawFd
 
 fn main() -> Result<()> {
     println!("r-jai: booting...");
@@ -10,8 +11,14 @@ fn main() -> Result<()> {
         Ok(fd) => {
             println!("Successfully opened filesystem context for '{}'. FD: {:?}", fs_type, fd);
 
-            // Temporarily removed fsconfig_set_string call due to rustix API issues.
-            // Will re-implement with nix or a more stable rustix API version.
+            // Call the libc-based fsconfig_set_string
+            mount::fsconfig_set_string(
+                fd.as_raw_fd(), // Use as_raw_fd() to get c_int
+                "source",
+                fs_type,
+            )?;
+
+            println!("Successfully configured filesystem context for '{}' with source '{}'.", fs_type, fs_type);
 
             Ok(())
         },

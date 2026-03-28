@@ -16,7 +16,7 @@ Rewrite the Stanford [jai](https://jai.scs.stanford.edu/) project in Rust to pro
 - Task: Ralph installs Rust, Human snapshots the sandbox.
 
 ### Phase 1: The Syscall Bridge (The "Fix")
-- **New Mount API:** Implement type-safe wrappers for `fsopen` [x], `fsconfig` (BLOCKED: `rustix` API issues, re-evaluating with `nix`), `fsmount`, `move_mount`, and `mount_setattr`.
+- **New Mount API:** Implement type-safe wrappers for `fsopen` [x], `fsconfig` [x], `fsmount`, `move_mount`, and `mount_setattr`.
 - **Crate Selection:** 
   - `rustix`: For raw, high-performance syscalls.
   - `nix`: For standard POSIX/Linux abstractions.
