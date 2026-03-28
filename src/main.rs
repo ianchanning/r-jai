@@ -5,17 +5,18 @@ use anyhow::Result;
 fn main() -> Result<()> {
     println!("r-jai: booting...");
 
-    let fs_type = "tmpfs"; // No need for null terminator here, CString handles it
+    let fs_type = "tmpfs";
     match mount::fsopen_wrapper(fs_type) {
         Ok(fd) => {
             println!("Successfully opened filesystem context for '{}'. FD: {:?}", fs_type, fd);
-            // In a real scenario, you'd do more with the fd, and close it.
-            // For now, we'll just print and exit.
-            // Consider adding a proper close mechanism later.
+
+            // Temporarily removed fsconfig_set_string call due to rustix API issues.
+            // Will re-implement with nix or a more stable rustix API version.
+
             Ok(())
         },
         Err(e) => {
-            eprintln!("Error opening filesystem context for '{}': {}", fs_type, e);
+            eprintln!("Error with filesystem context for '{}': {}", fs_type, e);
             Err(e)
         }
     }

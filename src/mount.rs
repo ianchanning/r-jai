@@ -1,8 +1,6 @@
-// src/mount.rs
-
 use anyhow::{Result, Context};
 use rustix::mount::{FsOpenFlags, fsopen};
-use rustix::fd::OwnedFd; // Only OwnedFd is needed
+use rustix::fd::{OwnedFd}; // Import BorrowedFd
 use std::ffi::{CStr, CString};
 
 /// Creates a new filesystem context for a new mount.
@@ -17,7 +15,7 @@ use std::ffi::{CStr, CString};
 /// # Returns
 /// A `Result` containing the `OwnedFd` of the new filesystem context on success,
 /// or an `anyhow::Error` on failure.
-pub fn fsopen_wrapper(fs_name: &str) -> Result<OwnedFd> { // Changed return type to OwnedFd
+pub fn fsopen_wrapper(fs_name: &str) -> Result<OwnedFd> {
     let fs_name_cstring = CString::new(fs_name)
         .context("Filesystem name contained null bytes")?;
     let fs_name_cstr = CStr::from_bytes_with_nul(fs_name_cstring.as_bytes_with_nul())
@@ -29,4 +27,4 @@ pub fn fsopen_wrapper(fs_name: &str) -> Result<OwnedFd> { // Changed return type
     Ok(fd)
 }
 
-// TODO: Implement fsconfig, fsmount, move_mount, mount_setattr
+// TODO: Implement fsconfig, fsmount, move_mount, mount_setattr.
