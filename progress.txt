@@ -3,3 +3,4 @@ eagle-golf: Implemented fsopen_wrapper in src/mount.rs, integrated into src/main
 eagle-golf: Attempted fsconfig wrapper with rustix (v0.38, then v1.1.4), encountered persistent API issues. Reverted fsconfig implementation; investigating nix as alternative.
 eagle-golf: Successfully implemented fsconfig_set_string wrapper using libc calls due to rustix API limitations.
 ## Strike: bull-lima - PHASE ZERO COMPLETE: Environment ready for snapshotting.
+## Strike: bull-lima - Implemented fsmount_wrapper using libc::syscall.

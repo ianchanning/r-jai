@@ -4,9 +4,9 @@
 Implement safe Rust wrappers for the Linux "New Mount API" syscalls using `rustix`.
 
 ## Tasks
-- [ ] Implement `fsopen(fsname, flags)`
-- [ ] Implement `fsconfig(fd, cmd, key, value, flags)`
-- [ ] Implement `fsmount(fd, flags, attr_flags)`
+- [x] Implement fsopen(fsname, flags)
+- [x] Implement fsconfig(fd, cmd, key, value, flags)
+- [x] Implement `fsmount(fd, flags, attr_flags)`
 - [ ] Implement `move_mount(from_fd, from_path, to_fd, to_path, flags)`
 - [ ] Implement `mount_setattr(fd, path, flags, attr, size)`
 

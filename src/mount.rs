@@ -11,6 +11,44 @@ const SYS_FSCONFIG: c_long = 433; // For x86_64
 // Define FSCONFIG_SET_STRING command
 const FSCONFIG_SET_STRING: c_int = 8;
 
+// Define the syscall number for fsmount
+#[cfg(target_arch = "x86_64")]
+const SYS_FSMOUNT: c_long = 432; // For x86_64
+
+/// Creates a new detached mount object from a filesystem context.
+///
+/// This function directly calls the `fsmount` syscall.
+///
+/// # Arguments
+/// * `fs_fd` - The file descriptor for the filesystem context.
+/// * `flags` - Mount flags (e.g., FSMOUNT_CLOEXEC).
+/// * `attr_flags` - Mount attributes (e.g., MOUNT_ATTR_RDONLY).
+///
+/// # Returns
+/// A `Result` containing the `OwnedFd` of the new detached mount object on success,
+/// or an `anyhow::Error` on failure.
+pub fn fsmount_wrapper(
+    fs_fd: c_int,
+    flags: u32,
+    attr_flags: u32,
+) -> Result<OwnedFd> {
+    let res = unsafe {
+        libc::syscall(
+            SYS_FSMOUNT,
+            fs_fd,
+            flags,
+            attr_flags,
+        )
+    };
+
+    if res == -1 {
+        let errno = unsafe { *libc::__errno_location() };
+        Err(anyhow::anyhow!("fsmount syscall failed: {}", std::io::Error::from_raw_os_error(errno)))
+    } else {
+        Ok(unsafe { OwnedFd::from_raw_fd(res as c_int) })
+    }
+}
+
 /// Creates a new filesystem context for a new mount.
 ///
 /// This function wraps the `fsopen` syscall to create a new filesystem context
