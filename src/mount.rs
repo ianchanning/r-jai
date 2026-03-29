@@ -1,6 +1,6 @@
 use anyhow::{Result, Context};
 use rustix::mount::{FsOpenFlags, fsopen};
-use rustix::fd::OwnedFd; // Import BorrowedFd
+use rustix::fd::{OwnedFd, FromRawFd}; // Import OwnedFd and FromRawFd
 use std::ffi::{CStr, CString};
 use libc::{self, c_int, c_long};
 

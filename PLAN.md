@@ -9,6 +9,12 @@ Rewrite the Stanford [jai](https://jai.scs.stanford.edu/) project in Rust to pro
 - **Ownership Alignment:** Use User Namespaces to ensure sandbox files are owned by the host user, eliminating the need for `sudo` or root-cleanup hacks.
 - **Sub-millisecond Overhead:** Bypasses the Docker daemon entirely for instant "bubble" creation.
 
+## Core Mandates (For Agents & Humans)
+- **Transparency over Trophies:** The *process* of building `r-jai` is more important than the final outcome. Every agent must clearly document where everything is.
+- **No Magic:** Do not perform hidden environment setup (e.g., hidden `export` or `alias` calls) without documenting it in `README.md` and `progress.txt`.
+- **Environment Handoff:** The Rust toolchain is in `/root/.cargo/bin`. Every agent **MUST** run `source $HOME/.cargo/env` before using `cargo`.
+- **Validation Before Finalization:** If you claim a phase is complete, it must be building and passing checks (e.g., `cargo check`). No "unverified success" messages.
+
 ## Technical Roadmap
 
 ### Phase 0: The Infrastructure Forge (The "Axe-Sharpening")
