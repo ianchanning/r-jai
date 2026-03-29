@@ -4,7 +4,7 @@
 Prepare a specialized sandbox environment equipped with the Rust toolchain (rustup, cargo, rustc, clippy).
 
 ## Tasks
-- [ ] Install the Rust toolchain via `rustup`.
+- [x] Install the Rust toolchain via `rustup`.
 - [ ] Configure environment variables in `.bashrc` or a persistent profile.
 - [ ] Verify installation with `rustc --version` and `cargo --version`.
 - [ ] (Self-Termination) Signal completion for the "Great Freeze" (Template Saving).
