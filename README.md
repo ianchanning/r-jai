@@ -1,25 +1,23 @@
-# r-jai: Rust-powered Sandbox for AI Agents
+# r-jai: Rust-powered Sandbox for AI Agents (RALPH-ALIGNED v1.0)
 
-## ⚠️ MANDATORY SETUP (Read Before Anything Else)
-The Rust toolchain is installed in `/root/.cargo/bin`, but the shell environment is **not persistent** across agent turns or session restarts until the next template snapshot.
+## ⚠️ MANDATORY SETUP (RALPH_ALIGNMENT)
+This project is aligned with the `Safer Ralph` Mothership protocol. 
 
-**Every agent must run the following before any cargo command:**
+**Every agent MUST run the following before any work:**
 ```bash
-source $HOME/.cargo/env
+[ -f .env.agent ] && source .env.agent
 ```
 
-If `cargo` is still missing, it means the snapshot did not include the toolchain, and it must be re-installed using the instructions in `specs/000-infrastructure.md`.
+## The Holy Trinity of State
+- **The Intent:** [specs/](specs/) (Topic of Concern)
+- **The Strategy:** [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) (Instruction Pointer)
+- **The Heart:** [AGENTS.md](AGENTS.md) (Operational Guide)
 
-## Project Overview
-A rewrite of the Stanford [jai](https://jai.scs.stanford.edu/) project in Rust. This tool provides a modern, high-performance, and portable sandbox for AI orchestration.
+## Current Status
+See [progress.txt](progress.txt) for the latest work and **!!NEEDS_SNAPSHOT!!** signals.
 
-## Documentation Entry Points
-- **Architecture & Roadmap:** [PLAN.md](PLAN.md)
-- **Phase 0 (Infrastructure):** [specs/000-infrastructure.md](specs/000-infrastructure.md)
-- **Phase 1 (Syscall Bridge):** [specs/001-syscalls.md](specs/001-syscalls.md)
-- **Current Status:** [progress.txt](progress.txt)
-
-## Development Workflow
-1. **Source the Environment:** `source $HOME/.cargo/env`
-2. **Build/Check:** `cargo check`
-3. **No Hidden State:** Do not modify `.bashrc` or other system files without explicit documentation. If you change something about the environment, update **this file** and `PLAN.md`.
+## Persistence Rule
+Do not modify `.bashrc`. All environment mutations (PATH, exports) MUST be appended to **.env.agent**.
+```bash
+echo 'source $HOME/.cargo/env' >> .env.agent
+```

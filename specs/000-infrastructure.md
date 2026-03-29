@@ -19,8 +19,10 @@ Prepare a specialized sandbox environment equipped with the Rust toolchain (rust
 - `cargo --version` must return a valid version.
 - `clippy` must be available.
 
-## Agent Handoff & Persistence (MANDATORY)
-**⚠️ ATTENTION AGENTS:** The toolchain in `/root/.cargo/bin` is not automatically in your `PATH`.
-You **MUST** run:
-`source $HOME/.cargo/env`
-at the beginning of every turn or session where `cargo` or `rustc` is required. **Never assume it is already there.**
+## Agent Handoff & Persistence (RALPH_ALIGNMENT v1.0)
+**⚠️ MANDATORY PROTOCOL:** 
+1. **Persistence:** The Rust toolchain in `/root/.cargo/bin` is ephemeral. Every agent **MUST** ensure the environment is re-hydrated by checking for or updating `.env.agent` in the project root.
+   - To persist: `echo 'source $HOME/.cargo/env' >> .env.agent`
+2. **Snapshot Signal:** If the toolchain is missing or was just installed, the agent MUST add the following marker to `progress.txt`:
+   - `!!NEEDS_SNAPSHOT!!`
+3. **Verification:** Always run `source .env.agent` before any `cargo` command.
