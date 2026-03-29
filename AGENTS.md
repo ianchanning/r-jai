@@ -1,3 +1,9 @@
+## CURRENT SESSION: bull-lima
+- **Identity**: bull-lima (Sun Mar 29 12:42:22 UTC 2026)
+- **Agent**: gemini (gemini-2.5-flash)
+- **Persona**: rust-architect
+- **Environment**: PATH re-hydrated from .env.agent
+
 # r-jai: Agent Operational Guide (Heart)
 
 ## Current Session Context
