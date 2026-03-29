@@ -121,6 +121,10 @@ pub fn fsconfig_set_string(
 #[cfg(target_arch = "x86_64")]
 const SYS_MOVEMOUNT: c_long = 429; // For x86_64
 
+// Define the syscall number for mount_setattr
+#[cfg(target_arch = "x86_64")]
+const SYS_MOUNT_SETATTR: c_long = 434; // For x86_64
+
 /// Moves a mount.
 ///
 /// This function directly calls the `move_mount` syscall.
@@ -160,4 +164,42 @@ pub fn move_mount_wrapper(
     }
 }
 
-// TODO: Implement fsconfig, fsmount, move_mount, mount_setattr.
+/// Sets attributes of a mount.
+///
+/// This function directly calls the `mount_setattr` syscall.
+///
+/// # Arguments
+/// * `fd` - File descriptor of the mount to modify.
+/// * `path` - Path relative to `fd` identifying the mount.
+/// * `flags` - Flags for the operation (e.g., AT_EMPTY_PATH).
+/// * `attr` - Pointer to a `mount_attr` structure.
+/// * `size` - Size of the `mount_attr` structure.
+///
+/// # Returns
+/// A `Result` indicating success or an `anyhow::Error` on failure.
+pub fn mount_setattr_wrapper(
+    fd: c_int,
+    path: &CStr,
+    flags: u32,
+    attr: *const libc::mount_attr,
+    size: usize,
+) -> Result<()> {
+    let res = unsafe {
+        libc::syscall(
+            SYS_MOUNT_SETATTR,
+            fd,
+            path.as_ptr(),
+            flags,
+            attr,
+            size,
+        )
+    };
+
+    if res == -1 {
+        let errno = unsafe { *libc::__errno_location() };
+        Err(anyhow::anyhow!("mount_setattr syscall failed: {}", std::io::Error::from_raw_os_error(errno)))
+    } else {
+        Ok(())
+    }
+}
+

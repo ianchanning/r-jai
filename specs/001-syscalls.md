@@ -8,7 +8,7 @@ Implement safe Rust wrappers for the Linux "New Mount API" syscalls using `rusti
 - [x] Implement fsconfig(fd, cmd, key, value, flags)
 - [x] Implement `fsmount(fd, flags, attr_flags)`
 - [x] Implement `move_mount(from_fd, from_path, to_fd, to_path, flags)`
-- [ ] Implement `mount_setattr(fd, path, flags, attr, size)`
+- [x] Implement `mount_setattr(fd, path, flags, attr, size)`
 
 ## Verification
 - Code should compile on Ubuntu 22.04 (via rustix).

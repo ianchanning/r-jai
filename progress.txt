@@ -26,3 +26,4 @@ eagle-golf: Successfully implemented fsconfig_set_string wrapper using libc call
   - [ ] NEXT STEP: Implement Phase 1: The Syscall Bridge (fsmount, move_mount).
 
 ## Strike: bull-lima - Implemented move_mount_wrapper using libc::syscall.
+## Strike: bull-lima - Implemented mount_setattr_wrapper using libc::syscall.
