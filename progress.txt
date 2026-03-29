@@ -24,3 +24,5 @@ eagle-golf: Successfully implemented fsconfig_set_string wrapper using libc call
   - [x] TOOLCHAIN: Rust 1.94 (needs 'source .env.agent' at start)
   - [x] BLOCKERS: Fixed FromRawFd import, codebase building.
   - [ ] NEXT STEP: Implement Phase 1: The Syscall Bridge (fsmount, move_mount).
+
+## Strike: bull-lima - Implemented move_mount_wrapper using libc::syscall.

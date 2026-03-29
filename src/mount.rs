@@ -117,4 +117,47 @@ pub fn fsconfig_set_string(
     }
 }
 
+// Define the syscall number for move_mount
+#[cfg(target_arch = "x86_64")]
+const SYS_MOVEMOUNT: c_long = 429; // For x86_64
+
+/// Moves a mount.
+///
+/// This function directly calls the `move_mount` syscall.
+///
+/// # Arguments
+/// * `from_fd` - File descriptor for the source mount namespace.
+/// * `from_path` - Path within `from_fd` to the mount to be moved.
+/// * `to_fd` - File descriptor for the destination mount namespace.
+/// * `to_path` - Path within `to_fd` where the mount will be moved.
+/// * `flags` - Move mount flags (e.g., MOVE_MOUNT_F_EMPTY_PATH).
+///
+/// # Returns
+/// A `Result` indicating success or an `anyhow::Error` on failure.
+pub fn move_mount_wrapper(
+    from_fd: c_int,
+    from_path: &CStr,
+    to_fd: c_int,
+    to_path: &CStr,
+    flags: u32,
+) -> Result<()> {
+    let res = unsafe {
+        libc::syscall(
+            SYS_MOVEMOUNT,
+            from_fd,
+            from_path.as_ptr(),
+            to_fd,
+            to_path.as_ptr(),
+            flags,
+        )
+    };
+
+    if res == -1 {
+        let errno = unsafe { *libc::__errno_location() };
+        Err(anyhow::anyhow!("move_mount syscall failed: {}", std::io::Error::from_raw_os_error(errno)))
+    } else {
+        Ok(())
+    }
+}
+
 // TODO: Implement fsconfig, fsmount, move_mount, mount_setattr.
